@@ -1,0 +1,31 @@
+.apt-home {
+  padding: 16px 20px;
+}
+
+.hitel-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+}
+
+.hitel-menu-list li {
+  margin: 4px 0;
+}
+
+.hitel-menu-list a {
+  color: var(--hitel-link);
+  text-decoration: none;
+}
+
+.hitel-menu-list a:hover {
+  color: var(--hitel-text-bright);
+  text-decoration: underline;
+}
+
+.hitel-footer {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hitel-border);
+  font-size: 12px;
+  color: var(--hitel-text);
+}

@@ -1,0 +1,90 @@
+.hitel-header {
+  background: var(--hitel-paper);
+  border: 1px solid var(--hitel-border);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.retro-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.retro-logo {
+  font-family: var(--hitel-font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--hitel-text-bright);
+  text-decoration: none;
+}
+
+.retro-logo:hover {
+  color: var(--hitel-link);
+}
+
+.apt-dropdown {
+  position: relative;
+}
+
+.apt-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--hitel-font);
+  font-size: 14px;
+  background: var(--hitel-input-bg);
+  border: 1px solid var(--hitel-border);
+  color: var(--hitel-text-bright);
+  cursor: pointer;
+}
+
+.apt-dropdown-trigger:hover {
+  color: var(--hitel-highlight-yellow);
+}
+
+.apt-name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.apt-arrow {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.apt-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 4px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--hitel-input-bg);
+  border: 1px solid var(--hitel-border);
+  min-width: 220px;
+  z-index: 100;
+}
+
+.apt-dropdown-menu li {
+  margin: 0;
+}
+
+.apt-dropdown-menu a {
+  display: block;
+  padding: 8px 12px;
+  font-family: var(--hitel-font);
+  color: var(--hitel-text);
+  text-decoration: none;
+}
+
+.apt-dropdown-menu a:hover,
+.apt-dropdown-menu a.current {
+  background: var(--hitel-highlight-purple);
+  color: var(--hitel-highlight-yellow);
+}
