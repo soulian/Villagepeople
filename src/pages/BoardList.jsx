@@ -1,17 +1,72 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getPosts, getBoardDisplayName } from '../data/mock'
+import {
+  getPosts,
+  getBoardDisplayName,
+  isBoardProtected,
+  getStoredAptAccess,
+  setAptBoardAccess,
+  checkAptBoardPassword,
+} from '../data/mock'
 import './BoardList.css'
 
 export default function BoardList() {
   const { aptId, boardId } = useParams()
   const boardName = getBoardDisplayName(aptId, boardId)
   const posts = getPosts(aptId, boardId)
+  const protectedBoard = isBoardProtected(boardId)
+  const hasAccess = !protectedBoard || getStoredAptAccess(aptId)
+
+  const [passwordInput, setPasswordInput] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+
+  const handleUnlock = (e) => {
+    e.preventDefault()
+    setPasswordError('')
+    if (!passwordInput.trim()) {
+      setPasswordError('비밀번호를 입력하세요.')
+      return
+    }
+    if (!checkAptBoardPassword(aptId, passwordInput.trim())) {
+      setPasswordError('비밀번호가 일치하지 않습니다.')
+      return
+    }
+    setAptBoardAccess(aptId)
+    setPasswordInput('')
+  }
+
+  if (protectedBoard && !hasAccess) {
+    return (
+      <div className="board-list hitel-card board-unlock">
+        <nav className="hitel-nav">
+          <Link to={`/apt/${aptId}`}>◀ 메인</Link>
+          <span># {boardName} 🔑</span>
+        </nav>
+        <p className="board-unlock-desc">이 게시판은 아파트 비밀번호를 입력해야 열람할 수 있습니다.</p>
+        <form onSubmit={handleUnlock} className="board-unlock-form">
+          <label>
+            <span>아파트 비밀번호</span>
+            <input
+              type="password"
+              className="hitel-input"
+              placeholder="비밀번호 입력"
+              value={passwordInput}
+              onChange={(e) => { setPasswordInput(e.target.value); setPasswordError('') }}
+              autoComplete="current-password"
+            />
+          </label>
+          {passwordError && <p className="hitel-error">{passwordError}</p>}
+          <button type="submit" className="hitel-btn">[ 확인 ]</button>
+        </form>
+      </div>
+    )
+  }
 
   return (
     <div className="board-list hitel-card">
       <nav className="hitel-nav">
         <Link to={`/apt/${aptId}`}>◀ 메인</Link>
-        <span># {boardName}</span>
+        <span># {boardName}{protectedBoard ? ' 🔑' : ''}</span>
       </nav>
       <h2 className="hitel-board-title">게시판 총 {posts.length}건</h2>
       <table className="hitel-table">

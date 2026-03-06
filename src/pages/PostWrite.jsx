@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import {
   addPost,
   checkOperatorPassword,
   getStoredNickname,
   setStoredNickname,
+  isBoardProtected,
+  getStoredAptAccess,
 } from '../data/mock'
 import './PostWrite.css'
 
@@ -12,6 +14,12 @@ export default function PostWrite() {
   const { aptId, boardId } = useParams()
   const navigate = useNavigate()
   const isNotice = boardId === 'notice'
+  const protectedBoard = isBoardProtected(boardId)
+  const hasAccess = !protectedBoard || getStoredAptAccess(aptId)
+
+  if (protectedBoard && !hasAccess) {
+    return <Navigate to={`/apt/${aptId}/board/${boardId}`} replace />
+  }
 
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')

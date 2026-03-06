@@ -17,6 +17,53 @@ export const BOARD_IDS = {
   suggest: '개선건의사항',
 }
 
+/** 4번(소식), 5번(개선건의사항) 게시판은 아파트별 비밀번호 필요 */
+export const PROTECTED_BOARDS = ['news', 'suggest']
+
+export function isBoardProtected(boardId) {
+  return PROTECTED_BOARDS.includes(boardId)
+}
+
+/** 아파트별 게시판 비밀번호 (필요시 코드에서 변경) */
+export const APT_BOARD_PASSWORDS = {
+  doosan: 'doosan55',
+  hanra3: 'hanra55',
+  hwain2: 'hwain55',
+  imgwang: 'imgwang55',
+  michelan: 'michelan55',
+  kolon: 'kolon55',
+  housestory: 'housestory55',
+  gyeryong: 'gyeryong55',
+  seogwang: 'seogwang55',
+}
+
+const APT_ACCESS_KEY = 'village_people_apt_access'
+
+export function checkAptBoardPassword(aptId, input) {
+  const pw = APT_BOARD_PASSWORDS[aptId]
+  return pw != null && input === pw
+}
+
+export function getStoredAptAccess(aptId) {
+  try {
+    const raw = sessionStorage.getItem(APT_ACCESS_KEY)
+    if (!raw) return false
+    const obj = JSON.parse(raw)
+    return !!obj[aptId]
+  } catch (_) {
+    return false
+  }
+}
+
+export function setAptBoardAccess(aptId) {
+  try {
+    const raw = sessionStorage.getItem(APT_ACCESS_KEY)
+    const obj = raw ? JSON.parse(raw) : {}
+    obj[aptId] = true
+    sessionStorage.setItem(APT_ACCESS_KEY, JSON.stringify(obj))
+  } catch (_) {}
+}
+
 /** 공지사항 글쓰기용 운영자 비밀번호 (필요시 코드에서 변경) */
 export const OPERATOR_PASSWORD = 'village2024'
 

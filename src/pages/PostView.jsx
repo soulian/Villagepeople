@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, Navigate } from 'react-router-dom'
 import {
   getPost,
   getComments,
@@ -8,6 +8,8 @@ import {
   getBoardDisplayName,
   getStoredNickname,
   setStoredNickname,
+  isBoardProtected,
+  getStoredAptAccess,
 } from '../data/mock'
 import './PostView.css'
 
@@ -15,6 +17,12 @@ export default function PostView() {
   const { aptId, boardId, postId } = useParams()
   const boardName = getBoardDisplayName(aptId, boardId)
   const [post, setPost] = useState(null)
+  const protectedBoard = isBoardProtected(boardId)
+  const hasAccess = !protectedBoard || getStoredAptAccess(aptId)
+
+  if (protectedBoard && !hasAccess) {
+    return <Navigate to={`/apt/${aptId}/board/${boardId}`} replace />
+  }
   const [comments, setComments] = useState([])
   const [commentText, setCommentText] = useState('')
   const [commentNickname, setCommentNickname] = useState('')
