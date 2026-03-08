@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   getPosts,
+  getComments,
   getBoardDisplayName,
   isBoardProtected,
   getStoredAptAccess,
@@ -84,18 +85,24 @@ export default function BoardList() {
               <td colSpan={4} className="hitel-empty">아직 글이 없습니다. 첫 글을 남겨보세요.</td>
             </tr>
           ) : (
-            posts.map((post, i) => (
-              <tr key={post.id}>
-                <td>{posts.length - i}</td>
-                <td>{post.author}</td>
-                <td>
-                  <Link to={`/apt/${aptId}/board/${boardId}/post/${post.id}`}>
-                    {post.title}
-                  </Link>
-                </td>
-                <td>{post.views || 0}</td>
-              </tr>
-            ))
+            posts.map((post, i) => {
+              const commentCount = getComments(aptId, boardId, post.id).length
+              return (
+                <tr key={post.id}>
+                  <td>{posts.length - i}</td>
+                  <td>{post.author}</td>
+                  <td>
+                    <Link to={`/apt/${aptId}/board/${boardId}/post/${post.id}`}>
+                      {post.title}
+                      {commentCount > 0 && (
+                        <span className="board-list-comment-count"> ({commentCount})</span>
+                      )}
+                    </Link>
+                  </td>
+                  <td>{post.views || 0}</td>
+                </tr>
+              )
+            })
           )}
         </tbody>
       </table>
